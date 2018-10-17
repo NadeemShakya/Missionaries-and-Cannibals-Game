@@ -44,15 +44,15 @@ function applyOperation(tempState) {
       if(tempState.value[0] >= 2) {
         addState(tempState, [tempState.value[0] - 2, tempState.value[1] - 0, 0]);
       }
-      if(tempState.value[1] >= 2) {
-        addState(tempState, [tempState.value[0] - 0, tempState.value[1] - 2, 0]);
-      }
       if(tempState.value[0] >= 1 && tempState.value[1] >= 1) {
         addState(tempState, [tempState.value[0] - 1, tempState.value[1] - 1, 0]);
       }
       if(tempState.value[1] >= 1) {
         addState(tempState, [tempState.value[0] - 0, tempState.value[1] - 1, 0]);
-      }            
+      }    
+      if(tempState.value[1] >= 2) {
+        addState(tempState, [tempState.value[0] - 0, tempState.value[1] - 2, 0]);
+      }              
     } else if(boatPosition === 0) {
       // If Boat is at the right bank.
       // console.log("boat is going from Right to Left") 
@@ -62,15 +62,15 @@ function applyOperation(tempState) {
       if(initialState[1] - tempState.value[1] > 0) {
         addState(tempState, [tempState.value[0] + 0, tempState.value[1] + 1, 1]);
       }
-      if((initialState[0] - tempState.value[0] > 0) && (initialState[1] - tempState.value[1] > 0)) {
-        addState(tempState, [tempState.value[0] + 1, tempState.value[1] + 1, 1]);
-      }
       if(initialState[0] - tempState.value[0] > 2) {
         addState(tempState, [tempState.value[0] + 2, tempState.value[1] + 0, 1]);
       }
       if(initialState[1] - tempState.value[1] > 2) {
         addState(tempState, [tempState.value[0] + 0, tempState.value[1] + 2, 1]);
       }
+      if((initialState[0] - tempState.value[0] > 0) && (initialState[1] - tempState.value[1] > 0)) {
+        addState(tempState, [tempState.value[0] + 1, tempState.value[1] + 1, 1]);
+      }      
     }
     
   }
