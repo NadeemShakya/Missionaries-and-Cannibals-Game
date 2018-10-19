@@ -8,6 +8,8 @@ class CreateState {
     this.value;
     this.parent;
     this.visited;
+    this.x;
+    this.y;
   }
 }
 // Creating a root node.
@@ -16,17 +18,23 @@ rootNode.value = initialState;
 rootNode.parent = initialState;
 rootNode.visited = false;
 
+
 function setup() {
-  createCanvas(1000, 600);
+  createCanvas(windowWidth, windowHeight);
   background(0);
   stroke(255);
   textSize(36);
   fill(255);
-  text("PRESS F12 OR Ctrl+Shift+I and view the console tab.", 50, 50);
+  // text("PRESS F12 OR Ctrl+Shift+I and view the console tab.", 50, 50);
+  rootNode.x = windowWidth / 2;
+  rootNode.y = 70;
   state.push(rootNode);
   while(iterator) {
     applyOperation(state[state.length - 1])
   }    
+
+  console.log(state);
+  displayState();
 }
 
 function applyOperation(tempState) {
@@ -40,19 +48,21 @@ function applyOperation(tempState) {
       // console.log("boat is going from Left to Right"); 
       if(tempState.value[0] >= 1) {
         addState(tempState, [tempState.value[0] - 1, tempState.value[1] - 0, 0]);
-      }
+      }      
       if(tempState.value[0] >= 2) {
         addState(tempState, [tempState.value[0] - 2, tempState.value[1] - 0, 0]);
       }
+
+      if(tempState.value[1] >= 2) {
+        addState(tempState, [tempState.value[0] - 0, tempState.value[1] - 2, 0]);
+      }       
       if(tempState.value[0] >= 1 && tempState.value[1] >= 1) {
         addState(tempState, [tempState.value[0] - 1, tempState.value[1] - 1, 0]);
       }
       if(tempState.value[1] >= 1) {
         addState(tempState, [tempState.value[0] - 0, tempState.value[1] - 1, 0]);
-      }    
-      if(tempState.value[1] >= 2) {
-        addState(tempState, [tempState.value[0] - 0, tempState.value[1] - 2, 0]);
-      }              
+      } 
+             
     } else if(boatPosition === 0) {
       // If Boat is at the right bank.
       // console.log("boat is going from Right to Left") 
@@ -75,10 +85,10 @@ function applyOperation(tempState) {
     
   }
 }
-console.log("These are the states to successfully complete the game.");
-console.log(state);
-console.log("These are all the killedStates that don't lead to the goal state.");
-console.log(killedState); 
+// console.log("These are the states to successfully complete the game.");
+// console.log(state);
+// console.log("These are all the killedStates that don't lead to the goal state.");
+// console.log(killedState); 
 
 function addState(parent, value) {
   var temp = new CreateState();
@@ -88,7 +98,7 @@ function addState(parent, value) {
   if(goalState[0] === value[0] && goalState[1] === value[1]) {
     state.push(temp);
     iterator = false;
-    console.log("HURAH! THE GOAL STATE IS ACHIEVED");
+    // console.log("HURAH! THE GOAL STATE IS ACHIEVED");
   }else if((temp.value[0] === 0) || temp.value[0] >= temp.value[1]) {
     if((3 - temp.value[0] === 0) || (3 - temp.value[0] >= 3 - temp.value[1])){
       if(repetitionChecker(value)) {
@@ -96,6 +106,8 @@ function addState(parent, value) {
       } else {
         state.push(temp);
       }
+    }else {
+      killedState.push(temp);
     }
   }else if(temp.value[0] < temp.value[1]) {
     killedState.push(temp); 
@@ -106,6 +118,89 @@ function addState(parent, value) {
 function repetitionChecker(value) {
   for(let i = 0; i < state.length; i++) {
     if(state[i].value[0] === value[0] && state[i].value[1] === value[1] && state[i].value[2] === value[2]) {
+      return true;
+    }
+  }
+  return false;
+}
+
+
+function displayState() {
+  textSize(20);
+  fill(255, 165, 0);
+  noStroke();
+  text(state[0].value, windowWidth/2, 70);
+  textSize(14);
+  for(i = 0; i < state.length; i++) {
+    let tempArray = [];
+    console.log(state[i]);
+    for(j = i + 1; j < state.length; j++) {
+      if(state[j].parent[0] === state[i].value[0] && state[j].parent[1] === state[i].value[1] && state[j].parent[2] === state[i].value[2] ) {
+        // console.log(state[j].value);
+        // text(state[i].value, windowWidth / 2, 50 + i * 40);
+        if(!tempChecker(state[j].value, tempArray)) {
+          tempArray.push(state[j].value);
+          
+        }
+      }
+    }
+    for(k = 0; k < killedState.length; k++) {
+      if(killedState[k].parent[0] === state[i].value[0] && killedState[k].parent[1] === state[i].value[1] && killedState[k].parent[2] === state[i].value[2] ) {
+        // console.log(killedStsate[k].value);
+        if(!tempChecker(killedState[k].value, tempArray)) {
+          tempArray.push(killedState[k].value);
+        }
+      } 
+    }    
+
+    // console.log(tempArray  );
+    if(tempArray.length === 1) {
+
+      text(tempArray[0], state[i].x, state[i].y + 40);
+      for(let b = 0; b < state.length; b++) {
+        if(state[b].value[0] === tempArray[0][0] && state[b].value[1] === tempArray[0][1] && state[b].value[2] === tempArray[0][2]) {
+          state[b].x =  state[i].x;
+          state[b].y = state[i].y + 50;
+          console.log(state[i].y);
+
+        }
+      }       
+    }else if(tempArray.length !== 0 && tempArray.length % 2 === 0) {
+
+      for(p = 0; p < tempArray.length; p++) {
+
+        text(tempArray[p],(state[i].x - (25 * (tempArray.length - 1))) + p * 50, state[i].y + 40);
+
+        // text(tempArray[p], ((windowWidth / 2) - 25 * (tempArray.length - 1)) + p * 50, 70 + i * 40);
+        for(let b = 0; b < state.length; b++) {
+          if(state[b].value[0] === tempArray[p][0] && state[b].value[1] === tempArray[p][1] && state[b].value[2] === tempArray[p][2]) {
+            state[b].x = state[i].x - (25 * (tempArray.length - 1)) + p * 50, state[i].y + 40;
+            state[b].y = state[i].y + 50;
+          }
+        }        
+      }
+    }else{
+      for(l = 0; l < tempArray.length; l++){
+        text(tempArray[l], ((state[i].x) - ((tempArray.length - 3) * 25) - 50) + l * 50, state[i].y + 40);
+        // text(tempArray[l], ((windowWidth / 2) - ((tempArray.length - 3) * 25) - 50) + l * 50, 70 + i * 40);
+        for(let b = 0; b < state.length; b++) {
+          if(state[b].value[0] === tempArray[l][0] && state[b].value[1] === tempArray[l][1] && state[b].value[2] === tempArray[l][2]) {
+            state[b].x =((state[i].x) - ((tempArray.length - 3) * 25) - 50) + l * 50, state[i].y + 40;
+            state[b].y = state[i].y + 50;
+          }
+        }
+      }
+    }
+    
+  console.log(tempArray);
+  }
+}
+
+function tempChecker(value, goalArray) {
+  // console.log(goalArray);
+  // console.log(value);
+  for(let i = 0; i < goalArray.length; i++) {
+    if(goalArray[0] === value[0] && goalArray[1] === value[1] && goalArray[2] === value[2]) {
       return true;
     }
   }
