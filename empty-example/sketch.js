@@ -21,7 +21,7 @@ rootNode.visited = false;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  background(0);
+  background(0, 0, 0, 200);
   stroke(255);
   fill(255);
   // text("PRESS F12 OR Ctrl+Shift+I and view the console tab.", 50, 50);
@@ -177,7 +177,7 @@ function displayState() {
             if(state[q].visited === true) {
               fill(0, 255, 0);
             }else { 
-              fill(0, 0, 255);  
+              fill(255, 165, 0);
             }  
           }
         }
@@ -198,11 +198,10 @@ function displayState() {
       for(l = 0; l < tempArray.length; l++){
         for(let q = 0; q < state.length; q++) {
           if(state[q].value[0] === tempArray[l][0] && state[q].value[1] === tempArray[l][1] && state[q].value[2] === tempArray[l][2]) {
-            console.log("bhayeko" + tempArray[l]);
             if(state[q].visited === true) {
               fill(0, 255, 0);        
             }else {
-              fill(0, 0, 255);  
+              fill(255, 165, 0);
             }  
           }
         }
