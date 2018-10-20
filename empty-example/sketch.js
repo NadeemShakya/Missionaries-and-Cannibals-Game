@@ -32,8 +32,10 @@ function setup() {
   while(iterator) {
     applyOperation(state[state.length - 1])
   }    
-
+  console.log("State");
   console.log(state);
+  console.log("Killed State");
+  console.log(killedState);
   displayState();
 }
 
@@ -49,19 +51,19 @@ function applyOperation(tempState) {
       if(tempState.value[0] >= 1) {
         addState(tempState, [tempState.value[0] - 1, tempState.value[1] - 0, 0]);
       }      
+      if(tempState.value[1] >= 1) {
+        addState(tempState, [tempState.value[0] - 0, tempState.value[1] - 1, 0]);
+      } 
       if(tempState.value[0] >= 2) {
         addState(tempState, [tempState.value[0] - 2, tempState.value[1] - 0, 0]);
       }
-
       if(tempState.value[1] >= 2) {
         addState(tempState, [tempState.value[0] - 0, tempState.value[1] - 2, 0]);
       }       
       if(tempState.value[0] >= 1 && tempState.value[1] >= 1) {
         addState(tempState, [tempState.value[0] - 1, tempState.value[1] - 1, 0]);
       }
-      if(tempState.value[1] >= 1) {
-        addState(tempState, [tempState.value[0] - 0, tempState.value[1] - 1, 0]);
-      } 
+
              
     } else if(boatPosition === 0) {
       // If Boat is at the right bank.
@@ -133,7 +135,6 @@ function displayState() {
   textSize(14);
   for(i = 0; i < state.length; i++) {
     let tempArray = [];
-    console.log(state[i]);
     for(j = i + 1; j < state.length; j++) {
       if(state[j].parent[0] === state[i].value[0] && state[j].parent[1] === state[i].value[1] && state[j].parent[2] === state[i].value[2] ) {
         // console.log(state[j].value);
@@ -155,23 +156,47 @@ function displayState() {
 
     // console.log(tempArray  );
     if(tempArray.length === 1) {
-
+      // for(let i = 0; i < state.length; i++) {
+      //   if(state[i].value === tempArray[0][0] && state[i].value === tempArray[0][1] && state[i].value === tempArray[0][2]) {
+      //     fill(0, 255, 0);
+      //     text(tempArray[0], state[i].x, state[i].y + 40);
+      //   }else {
+      //     text(tempArray[0], state[i].x, state[i].y + 40);
+      //   }
+      // }
       text(tempArray[0], state[i].x, state[i].y + 40);
+
       for(let b = 0; b < state.length; b++) {
         if(state[b].value[0] === tempArray[0][0] && state[b].value[1] === tempArray[0][1] && state[b].value[2] === tempArray[0][2]) {
           state[b].x =  state[i].x;
           state[b].y = state[i].y + 50;
-          console.log(state[i].y);
 
         }
       }       
     }else if(tempArray.length !== 0 && tempArray.length % 2 === 0) {
-
       for(p = 0; p < tempArray.length; p++) {
+        // for(let q = 0; q < state.length; q++) {
+        //   if(state[q].value[0] === tempArray[p][0] && state[q].value[1] === tempArray[p][1] && state[q].value[2] === tempArray[p][2]) {
+        //     console.log("bhayeko" + tempArray[p]);
+        //     if(state[q].visited === true) {
+        //       fill(0, 255, 0);
+        //       text(tempArray[p],(state[i].x - (25 * (tempArray.length - 1))) + p * 50, state[i].y + 40);
+        //     }else {
+        //       // fill(0, 0, 255);  
+        //       // text(tempArray[p],(state[i].x - (25 * (tempArray.length - 1))) + p * 50, state[i].y + 40);
+        //     }  
+        //   }
+        // }
 
+        // for(let t = 0; t < killedState.length; t++) {
+        //   if(killedState[t].value[0] === tempArray[p][0] && killedState[t].value[1] === tempArray[p][1] && killedState[t].value[2] === tempArray[p][2]){
+        //     fill(255, 0, 0);
+        //     text(tempArray[p],(state[i].x - (25 * (tempArray.length - 1))) + p * 50, state[i].y + 40);
+        //   }
+        // }
+        // fill(255, 165, 0);  
         text(tempArray[p],(state[i].x - (25 * (tempArray.length - 1))) + p * 50, state[i].y + 40);
 
-        // text(tempArray[p], ((windowWidth / 2) - 25 * (tempArray.length - 1)) + p * 50, 70 + i * 40);
         for(let b = 0; b < state.length; b++) {
           if(state[b].value[0] === tempArray[p][0] && state[b].value[1] === tempArray[p][1] && state[b].value[2] === tempArray[p][2]) {
             state[b].x = state[i].x - (25 * (tempArray.length - 1)) + p * 50, state[i].y + 40;
@@ -181,7 +206,21 @@ function displayState() {
       }
     }else{
       for(l = 0; l < tempArray.length; l++){
+        // for(let q = 0; q < state.length; q++) {
+        //   if(state[q].value[0] === tempArray[l][0] && state[q].value[1] === tempArray[l][1] && state[q].value[2] === tempArray[l][2]) {
+        //     console.log("bhayeko" + tempArray[l]);
+        //     if(state[q].visited === true) {
+        //       fill(0, 255, 0);        
+        //       text(tempArray[l], ((state[i].x) - ((tempArray.length - 3) * 25) - 50) + l * 50, state[i].y + 40);
+
+        //     }else {
+        //       fill(255, 165, 0);  
+        //       text(tempArray[l], ((state[i].x) - ((tempArray.length - 3) * 25) - 50) + l * 50, state[i].y + 40);
+        //     }  
+        //   }
+        // }
         text(tempArray[l], ((state[i].x) - ((tempArray.length - 3) * 25) - 50) + l * 50, state[i].y + 40);
+
         // text(tempArray[l], ((windowWidth / 2) - ((tempArray.length - 3) * 25) - 50) + l * 50, 70 + i * 40);
         for(let b = 0; b < state.length; b++) {
           if(state[b].value[0] === tempArray[l][0] && state[b].value[1] === tempArray[l][1] && state[b].value[2] === tempArray[l][2]) {
@@ -192,7 +231,6 @@ function displayState() {
       }
     }
     
-  console.log(tempArray);
   }
 }
 
