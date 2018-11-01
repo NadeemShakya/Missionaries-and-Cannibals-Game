@@ -21,7 +21,42 @@ rootNode.visited = false;
 
 function setup() {
   frameRate(3);
-  createCanvas(windowWidth, windowHeight - 100);
+  createCanvas(windowWidth, windowHeight);
+  background(0, 0, 74);
+  // LEGEND START
+  strokeWeight(1);
+  stroke(255);
+  noFill();
+  rect(50, 50, 200, 110);
+  fill(255);
+  noStroke();
+  textSize(12);
+  text('Legend', 60, 70);
+  fill(0, 255, 0);
+  noStroke();
+  rect(60, 100, 10, 10);
+  fill(255);
+  textSize(11);
+  text('Visited State leading to goal state.', 75, 108);
+  fill(255, 0, 0);
+  noStroke();
+  rect(60, 120, 10, 10);
+  fill(255);
+  textSize(11);
+  text('Killed State.', 75, 129);
+  fill(231, 149, 7);
+  noStroke();
+  rect(60, 140, 10, 10);
+  fill(255);
+  textSize(11);
+  text('Unvisited state.', 75, 150);  
+  // LEGEND END
+  fill(255);  
+  text('STATE SPACE TREE FOR CLASSICAL MISSIONARIES AND CANNIBALS GAME.', windowWidth /2  - 200, 30);   
+  textSize(18);
+  fill(255, 165, 0);
+  noStroke();
+  text('3, 3, 1', windowWidth / 2 - 10, 70);
   // set x and y position of the root node.
   rootNode.x = windowWidth / 2;
   rootNode.y = 70;
@@ -37,153 +72,12 @@ function setup() {
 }
 var i = 0;
 function draw() {
-  background(0, 0, 74);  
-  // river water
-  fill(0, 0, 190);
-  quad(windowWidth / 2 - 190, 170, windowWidth / 2 + 190, 170, windowWidth / 2 + 220, windowHeight - 130, windowWidth / 2 -  220, windowHeight - 130);
-  // moon
-  fill(255);
-  ellipse(100, 50, 50);
-  fill(255, 255, 255, 220);
-  ellipse(100, 50, 58);
-  // left bank grass
-  fill(0, 123, 0);
-  quad(0,150, windowWidth / 2 - 200, 150, windowWidth / 2 - 230, windowHeight - 120, 0, windowHeight - 120);
-  // left bank mud
-  fill(204, 153, 0);
-  quad(windowWidth / 2 - 200, 150, windowWidth / 2 - 190, 170, windowWidth / 2 -  220, windowHeight - 130 , windowWidth / 2 - 230, windowHeight - 120);
-  // right bank grass
-  fill(0, 123, 0);  
-  quad(windowWidth / 2 + 200, 150, windowWidth , 150, windowWidth , windowHeight - 120 , windowWidth / 2 + 230, windowHeight - 120);
-  // right bank mud
-  fill(204, 153, 0);
-  quad(windowWidth / 2 + 200, 150, windowWidth / 2 + 190, 170, windowWidth / 2 + 220, windowHeight - 130, windowWidth / 2 + 230, windowHeight - 120);
-  fill(255, 0, 0);
-
-  // set boat position
-  let x;
-  if(tracker[2] === 1) {
-     x = windowWidth / 2 - 200;
-  }else {
-     x = windowWidth / 2 + 80;
+  textSize(13);
+  displayState();
+  i++;
+  if(i >= state.length) {
+    noLoop();
   }
-  // boat
-  stroke(255);
-  fill(102, 50, 2);
-  beginShape();
-    vertex(x + 20, 150);
-    vertex(x + 40, 130);
-    vertex(x + 90, 130);
-    vertex(x + 110, 150);
-    vertex(x + 90, 170);
-    vertex(x + 40, 170);
-  endShape();
-  beginShape();
-    vertex(x + 20, 150);
-    vertex(x + 40, 170);
-    vertex(x + 90, 170);
-    vertex(x + 110, 150);
-    vertex(x + 90, 190);
-    vertex(x + 40, 190);
-    vertex(x + 20, 150 )
-  endShape();
-  // MISSIONARIES
-  for(let i = 0; i < tracker[0]; i++) {
-    noStroke();
-      // face
-      fill(255, 210, 127);
-      ellipse((windowWidth / 2 - 383) + i * 50, 150, 30, 50);
-      // cap 
-      fill(255, 0, 0);
-      ellipse((windowWidth / 2 - 383) + i * 50, 130, 20, 10);
-      // left eye
-      noFill();
-      stroke(0);
-      arc((windowWidth / 2 - 388) + i * 50, 145, 5, 5, 0, PI);
-      // right eye
-      arc((windowWidth / 2 - 376) + i * 50, 145, 5, 5, 0, PI);
-      // mouth
-      arc((windowWidth / 2 - 383) + i * 50, 160, 7, 5, 0, PI);
-  }
-  for(let i = 0; i < 3 - tracker[0]; i++) {
-    noStroke();
-    // face
-    fill(255, 210, 127);
-    ellipse((windowWidth / 2 + 383) + i * 50, 150, 30, 50);
-    // cap
-    fill(255, 0, 0);
-    ellipse((windowWidth / 2 + 383) + i * 50, 130, 20, 10);
-    // left eye 
-    noFill();
-    stroke(0);
-    arc((windowWidth / 2 + 388) + i * 50, 145, 5, 5, 0, PI);
-    // right eye
-    arc((windowWidth / 2 + 376) + i * 50, 145, 5, 5, 0, PI);
-    // mouth
-    arc((windowWidth / 2 + 383) + i * 50, 160, 7, 5, 0, PI);  
-  }
-  for(let j = 0; j < tracker[1]; j++) {
-    // CANNIBALS
-    noStroke();
-    // head
-    fill(194, 121, 45);
-    quad((windowWidth / 2 - 400) + j * 50, 210, (windowWidth / 2 - 360) + j * 50, 210, 310 + j * 50, 250, 290 + j  * 50, 250);
-    stroke(5);
-    strokeWeight(2);
-    // spooky hair
-    line(280 + j  * 50, 200, 285 + j * 50, 210);
-    line(300 + j  * 50, 200, 300 + j * 50, 210);
-    line(320 + j  * 50, 200, 315 + j * 50, 210);
-    fill(255, 0, 0);
-    strokeWeight(1);
-    // left eye
-    quad(290 + j * 50, 215, 298 + j * 50, 225, 290 + j * 50, 225);
-    // right eye
-    quad(310 + j * 50, 215, 302 + j * 50, 225, 310 + j * 50, 225);
-    // left mouth line
-    line(295 + j * 50, 240, 300 + j * 50, 235);
-    // right mouth line
-    line(305 + j * 50 , 240, 300 + j * 50, 235);
-  }
-  for(let j = 0; j < 3 - tracker[1]; j++) {
-    // CANNIBALS
-    noStroke();
-    // head
-    fill(194, 121, 45);
-    quad(950 + j * 50, 210, 990 + j * 50, 210, 980 + j * 50, 250, 960 + j * 50, 250);
-    stroke(5);
-    strokeWeight(2);
-    // spooky hair
-    line(950 + j * 50, 200, 955 + j * 50, 210);
-    line(970 + j * 50, 200, 970 + j * 50, 210);
-    line(990 + j * 50, 200, 985 + j * 50, 210);
-    fill(255, 0, 0);
-    strokeWeight(1);
-    // left eye
-    quad(960 + j * 50, 215, 968 + j * 50, 225, 960 + j * 50, 225);
-    // right eye
-    quad(980 + j * 50, 215, 972 + j * 50, 225, 980 + j * 50, 225);
-    // left mouth line
-    line(965 + j * 50, 240, 970 + j * 50, 235);
-    // right mouth line
-    line(975 + j * 50 , 240, 970 + j * 50, 235);    
-  }
-  fill(255);
-  text('Watch the console for more messages', windowWidth /2  - 100, 50);   
-
-
-
-
-  // textSize(20);
-  // fill(255, 165, 0);
-  // noStroke();
-  // text(state[0].value, windowWidth/2, 70);
-  // textSize(16);
-  // displayState();
-  // i++;
-  // if(i >= state.length) {
-  //   noLoop();
-  // }
 
 }
 function applyOperation(tempState) {
@@ -201,12 +95,10 @@ function applyOperation(tempState) {
       if(tempState.value[0] >= 2) {
         addState(tempState, [tempState.value[0] - 2, tempState.value[1] - 0, 0]);
       }       
-
       // 1 Missionary
       if(tempState.value[0] >= 1) {
         addState(tempState, [tempState.value[0] - 1, tempState.value[1] - 0, 0]);
       }  
-
       // 2 Cannibals
       if(tempState.value[1] >= 2) {
         addState(tempState, [tempState.value[0] - 0, tempState.value[1] - 2, 0]);
@@ -218,13 +110,9 @@ function applyOperation(tempState) {
       // 1 Cannibal
       if(tempState.value[1] >= 1) {
         addState(tempState, [tempState.value[0] - 0, tempState.value[1] - 1, 0]);
-      }      
-
-
-             
+      }          
     } else if(boatPosition === 0) {
       // If Boat is at the right bank.
-      // console.log("boat is going from Right to Left") 
       // 1 Missionary and 1 Cannibal
       if(initialState[0] - tempState.value[0] > 0) {
         addState(tempState, [tempState.value[0] + 1, tempState.value[1] + 0, 1]);
@@ -246,13 +134,8 @@ function applyOperation(tempState) {
         addState(tempState, [tempState.value[0] + 1, tempState.value[1] + 1, 1]);
       }      
     }
-    
   }
 }
-// console.log("These are the states to successfully complete the game.");
-// console.log(state);
-// console.log("These are all the killedStates that don't lead to the goal state.");
-// console.log(killedState); 
 
 function addState(parent, value) {
   var temp = new CreateState();
@@ -276,7 +159,6 @@ function addState(parent, value) {
     killedState.push(temp); 
   }
 }
-
 // Function to check whether a state already exists or not in the array
 function repetitionChecker(value) {
   for(let i = 0; i < state.length; i++) {
@@ -287,7 +169,7 @@ function repetitionChecker(value) {
   return false;
 }
 
-
+//function used to show the state space tree.
 function displayState() {
     let tempArray = [];
     for(j = i + 1; j < state.length; j++) {
@@ -383,7 +265,6 @@ function displayState() {
       }
     }  
 }
-
 function tempChecker(value, goalArray) {
   for(let i = 0; i < goalArray.length; i++) {
     if(goalArray[0] === value[0] && goalArray[1] === value[1] && goalArray[2] === value[2]) {

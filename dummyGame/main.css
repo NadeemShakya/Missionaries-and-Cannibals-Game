@@ -10,6 +10,7 @@ body {
 }
 h4 {
     text-align: center;
+    color: #fff;
 }
 ul {
     margin:10px auto;
@@ -27,12 +28,7 @@ ul li {
     border-radius: 5px;
     background-color:#F57F17;
     color: #fff;
-    /* margin:10px; */
 }
-
 ul li:hover {
-    cursor: pointer;
-    box-shadow:1px 1px 2px 1px rgba(255, 255, 255, 0.5);
-    transition: .3s;
-    
+    cursor: pointer; 
 }
