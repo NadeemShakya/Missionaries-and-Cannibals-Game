@@ -1,34 +1,26 @@
-let goButton = document.querySelector('#goButton');
 let missionaryCount;
 let cannibalCount;
 let tracker = [3, 3, 1];
 let parent;
-goButton.addEventListener("click", function() {
+// applying 5 possible operations on button click events.
+document.querySelector('#oneMissionary').addEventListener('click', () => play(1, 0));
+document.querySelector('#oneCannibal').addEventListener('click', () => play(0, 1));
+document.querySelector('#twoMissionaries').addEventListener('click', () => play(2, 0));
+document.querySelector('#twoCannibals').addEventListener('click', () => play(0, 2));
+document.querySelector('#oneMissionaryOneCannibal').addEventListener('click', () => play(1, 1));
 
-    missionaryCount = document.querySelector('#missionaries').value === ""?0:parseInt(document.querySelector('#missionaries').value);
-    document.querySelector('#missionaries').value = '';
-    cannibalCount = document.querySelector('#cannibals').value === ""?0:parseInt(document.querySelector('#cannibals').value);
-    document.querySelector('#cannibals').value = '';
-    if(missionaryCount === 0 && cannibalCount === 0) {
-        alert("Cannot move!");
-    }else {
-        applyMove(missionaryCount,cannibalCount );
-    }
-
-})
-
-function draw() {
-  
-    fill(255, 255, 255);
-    stroke(255);
-    line(20, 20, 200, 200);
-
+// take missionaries and cannibals count and apply appropriate operation
+const play = (M, C) => {
+    missionaryCount = M
+    cannibalCount = C;
+    applyMove(missionaryCount, cannibalCount);
 }
+// main function 
 function applyMove(M, C) {
     parent = tracker;
-    // Boat is at right or left bank
+    // check boat is at right or left bank
     if(tracker[2] === 1) {
-        // Total person in a boat
+        // check Total person in a boat
         if(M + C <= 2) {
             // User Input cannot be greater than available Missionaries and Cannibals.
             if(M > tracker[0]  || C > tracker[1]) {
@@ -36,36 +28,43 @@ function applyMove(M, C) {
             }else {
                 tracker[0] = tracker[0] - M;
                 tracker[1] = tracker[1] - C;
-                if(tracker[2] === 1?tracker[2]=0:tracker[2]=1);
+                if(tracker[2] === 1 ? tracker[2] = 0 : tracker[2] = 1);
+                console.log(tracker);
                 if(tracker[0] === 0 && tracker[1] === 0 && tracker[2] === 0) {                  
-
+                    console.log("YOU WON");
+                    alert("HURRAH! You won! Press enter to play again!");
+                    location.reload();
                 }else if(checkfromState()) {
                     console.log("Acceptable State");
                 }else {
-                    console.log("Game Over");
+                    console.log("GAME OVER");
+                    alert("WRONG MOVE! GAME OVER!");
+                    location.reload();
                 }
             }
         }else {
-            console.log("cannot accomodate more than two person in a boat")
+            console.log("Cannot accomodate more than two person in a boat");
         }
-
     }else {
+        // Boat is the right bank case.
         if(M > (3 - tracker[0]) || C > (3 - tracker[1])) {
             console.log("This means invalid input");
         }else {
             tracker[0] = tracker[0] + M;
             tracker[1] = tracker[1] + C;
-            (tracker[2] === 1?tracker[2]=0:tracker[2]=1); 
+            (tracker[2] === 1 ? tracker[2] = 0 : tracker[2] = 1); 
+            console.log(tracker);
             if(tracker[0] === 0 && tracker[1] === 0 && tracker[2] === 0) {
                 console.log("YOU WON");
             }else if(checkfromState()) {
                 console.log("Acceptable State");
             }else {
-                console.log("game Over");
+                console.log("Game Over");
             }
         }
     }
 }
+// to check if a state is acceptable or not from the 'state' array
 function checkfromState() {
     for(let i = 0; i < state.length; i++) {
         if(state[i].value[0] === tracker[0] && state[i].value[1] === tracker[1] && state[i].value[2] === tracker[2]) {
@@ -73,12 +72,4 @@ function checkfromState() {
         }
     }
     return false;
-}
-function setup() {
-    createCanvas(600, 600);
-    background(0);
-}
-
-function draw() {
-
 }

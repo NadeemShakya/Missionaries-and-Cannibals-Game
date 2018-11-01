@@ -3,6 +3,7 @@ let goalState = [0, 0, 0];
 let state = [];
 let killedState = [];
 let iterator = true;
+// create an object for individual state
 class CreateState { 
   constructor() {
     this.value;
@@ -19,19 +20,15 @@ rootNode.parent = initialState;
 rootNode.visited = false;
 
 function setup() {
-   
   frameRate(3);
-  stroke(255);
-  fill(255);
-  // text("PRESS F12 OR Ctrl+Shift+I and view the console tab.", 50, 50);
+  createCanvas(windowWidth, windowHeight - 100);
+  // set x and y position of the root node.
   rootNode.x = windowWidth / 2;
   rootNode.y = 70;
   state.push(rootNode);
   while(iterator) {
     applyOperation(state[state.length - 1])
-  
   }
-
   console.log("State:");
   console.log(state);
   console.log("Killed State:");
@@ -40,36 +37,141 @@ function setup() {
 }
 var i = 0;
 function draw() {
-  createCanvas(windowWidth, windowHeight);
-  background(0, 0, 0, 255);
+  background(0, 0, 74);  
+  // river water
+  fill(0, 0, 190);
+  quad(windowWidth / 2 - 190, 170, windowWidth / 2 + 190, 170, windowWidth / 2 + 220, windowHeight - 130, windowWidth / 2 -  220, windowHeight - 130);
+  // moon
+  fill(255);
+  ellipse(100, 50, 50);
+  fill(255, 255, 255, 220);
+  ellipse(100, 50, 58);
+  // left bank grass
+  fill(0, 123, 0);
+  quad(0,150, windowWidth / 2 - 200, 150, windowWidth / 2 - 230, windowHeight - 120, 0, windowHeight - 120);
+  // left bank mud
+  fill(204, 153, 0);
+  quad(windowWidth / 2 - 200, 150, windowWidth / 2 - 190, 170, windowWidth / 2 -  220, windowHeight - 130 , windowWidth / 2 - 230, windowHeight - 120);
+  // right bank grass
+  fill(0, 123, 0);  
+  quad(windowWidth / 2 + 200, 150, windowWidth , 150, windowWidth , windowHeight - 120 , windowWidth / 2 + 230, windowHeight - 120);
+  // right bank mud
+  fill(204, 153, 0);
+  quad(windowWidth / 2 + 200, 150, windowWidth / 2 + 190, 170, windowWidth / 2 + 220, windowHeight - 130, windowWidth / 2 + 230, windowHeight - 120);
+  fill(255, 0, 0);
 
-  noStroke();
+  // set boat position
+  let x;
+  if(tracker[2] === 1) {
+     x = windowWidth / 2 - 200;
+  }else {
+     x = windowWidth / 2 + 80;
+  }
+  // boat
+  stroke(255);
+  fill(102, 50, 2);
+  beginShape();
+    vertex(x + 20, 150);
+    vertex(x + 40, 130);
+    vertex(x + 90, 130);
+    vertex(x + 110, 150);
+    vertex(x + 90, 170);
+    vertex(x + 40, 170);
+  endShape();
+  beginShape();
+    vertex(x + 20, 150);
+    vertex(x + 40, 170);
+    vertex(x + 90, 170);
+    vertex(x + 110, 150);
+    vertex(x + 90, 190);
+    vertex(x + 40, 190);
+    vertex(x + 20, 150 )
+  endShape();
+  // MISSIONARIES
+  for(let i = 0; i < tracker[0]; i++) {
+    noStroke();
+      // face
+      fill(255, 210, 127);
+      ellipse((windowWidth / 2 - 383) + i * 50, 150, 30, 50);
+      // cap 
+      fill(255, 0, 0);
+      ellipse((windowWidth / 2 - 383) + i * 50, 130, 20, 10);
+      // left eye
+      noFill();
+      stroke(0);
+      arc((windowWidth / 2 - 388) + i * 50, 145, 5, 5, 0, PI);
+      // right eye
+      arc((windowWidth / 2 - 376) + i * 50, 145, 5, 5, 0, PI);
+      // mouth
+      arc((windowWidth / 2 - 383) + i * 50, 160, 7, 5, 0, PI);
+  }
+  for(let i = 0; i < 3 - tracker[0]; i++) {
+    noStroke();
+    // face
+    fill(255, 210, 127);
+    ellipse((windowWidth / 2 + 383) + i * 50, 150, 30, 50);
+    // cap
+    fill(255, 0, 0);
+    ellipse((windowWidth / 2 + 383) + i * 50, 130, 20, 10);
+    // left eye 
+    noFill();
+    stroke(0);
+    arc((windowWidth / 2 + 388) + i * 50, 145, 5, 5, 0, PI);
+    // right eye
+    arc((windowWidth / 2 + 376) + i * 50, 145, 5, 5, 0, PI);
+    // mouth
+    arc((windowWidth / 2 + 383) + i * 50, 160, 7, 5, 0, PI);  
+  }
+  for(let j = 0; j < tracker[1]; j++) {
+    // CANNIBALS
+    noStroke();
+    // head
+    fill(194, 121, 45);
+    quad((windowWidth / 2 - 400) + j * 50, 210, (windowWidth / 2 - 360) + j * 50, 210, 310 + j * 50, 250, 290 + j  * 50, 250);
+    stroke(5);
+    strokeWeight(2);
+    // spooky hair
+    line(280 + j  * 50, 200, 285 + j * 50, 210);
+    line(300 + j  * 50, 200, 300 + j * 50, 210);
+    line(320 + j  * 50, 200, 315 + j * 50, 210);
+    fill(255, 0, 0);
+    strokeWeight(1);
+    // left eye
+    quad(290 + j * 50, 215, 298 + j * 50, 225, 290 + j * 50, 225);
+    // right eye
+    quad(310 + j * 50, 215, 302 + j * 50, 225, 310 + j * 50, 225);
+    // left mouth line
+    line(295 + j * 50, 240, 300 + j * 50, 235);
+    // right mouth line
+    line(305 + j * 50 , 240, 300 + j * 50, 235);
+  }
+  for(let j = 0; j < 3 - tracker[1]; j++) {
+    // CANNIBALS
+    noStroke();
+    // head
+    fill(194, 121, 45);
+    quad(950 + j * 50, 210, 990 + j * 50, 210, 980 + j * 50, 250, 960 + j * 50, 250);
+    stroke(5);
+    strokeWeight(2);
+    // spooky hair
+    line(950 + j * 50, 200, 955 + j * 50, 210);
+    line(970 + j * 50, 200, 970 + j * 50, 210);
+    line(990 + j * 50, 200, 985 + j * 50, 210);
+    fill(255, 0, 0);
+    strokeWeight(1);
+    // left eye
+    quad(960 + j * 50, 215, 968 + j * 50, 225, 960 + j * 50, 225);
+    // right eye
+    quad(980 + j * 50, 215, 972 + j * 50, 225, 980 + j * 50, 225);
+    // left mouth line
+    line(965 + j * 50, 240, 970 + j * 50, 235);
+    // right mouth line
+    line(975 + j * 50 , 240, 970 + j * 50, 235);    
+  }
   fill(255);
   text('Watch the console for more messages', windowWidth /2  - 100, 50);   
-  fill(0, 255, 0);
-  // Left Green
-  for(let i = 0; i < tracker[0]; i++) {
-    ellipse(100 + i * 20, 200, 10);
-  }
-  // Right Green
-  for(let i = 0; i < (3 - tracker[0]); i++) {
-    ellipse(500  + i * 20, 200, 10);
-  }
-  // Left Red
-  fill(255, 0, 0);
-  for(let i = 0; i < tracker[1]; i++) {
-    ellipse(100 + i * 20, 250, 10);
-  }
-  // Right Red
-  for(let i = 0; i < (3 - tracker[1]); i++) {
-    ellipse(500 + i * 20, 250, 10);
-  }
-  fill(0, 0, 255);
-  if(tracker[2] === 1) {
-    rect(180, 225, 60, 10);
-  }else {
-    rect(400, 225, 60, 10);
-  }
+
+
 
 
   // textSize(20);
@@ -103,20 +205,21 @@ function applyOperation(tempState) {
       // 1 Missionary
       if(tempState.value[0] >= 1) {
         addState(tempState, [tempState.value[0] - 1, tempState.value[1] - 0, 0]);
-      }
+      }  
 
       // 2 Cannibals
       if(tempState.value[1] >= 2) {
         addState(tempState, [tempState.value[0] - 0, tempState.value[1] - 2, 0]);
-      }   
-      // 1 Cannibal
-      if(tempState.value[1] >= 1) {
-        addState(tempState, [tempState.value[0] - 0, tempState.value[1] - 1, 0]);
-      }   
+      }                      
       // 1 Missionary and 1 Cannibal
       if(tempState.value[0] >= 1 && tempState.value[1] >= 1) {
         addState(tempState, [tempState.value[0] - 1, tempState.value[1] - 1, 0]);
+      }
+      // 1 Cannibal
+      if(tempState.value[1] >= 1) {
+        addState(tempState, [tempState.value[0] - 0, tempState.value[1] - 1, 0]);
       }      
+
 
              
     } else if(boatPosition === 0) {

@@ -2,26 +2,22 @@
 <html>
   <head>
     <meta name="viewport" width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0>
-    <style> body {padding: 0; margin: 0;} </style>
+    <link rel="stylesheet" href="main.css">
     <script src="../p5.min.js"></script>
     <script src="../addons/p5.dom.min.js"></script>
-    <!-- <script src="sketch1.js"></script> -->
-
-    <!-- <script src="../addons/p5.sound.min.js"></script> -->
-
   </head>
   <body>
     <div>
-      <label for = "Missionaries">Missionaries:</label><br>
-      <input type="text" id = "missionaries" required>
-      <br>
-      <label for = "Cannibals">Cannibals:</label><br>
-      <input type="text" id = "cannibals" required><br>
-      <button id = "goButton">GO</button> 
+      <h4>SELECT YOUR MOVE</h4>
+      <ul>
+        <li id = 'oneMissionary'> 1 Missionary </li>
+        <li id = 'oneCannibal'> 1 Cannibal </li>
+        <li id = 'twoMissionaries'> 2 Missionaries </li>
+        <li id = 'twoCannibals'> 2 Cannibals</li>
+        <li id = 'oneMissionaryOneCannibal'> 1 Missionary & 1 Cannibal</li>
+      </ul>
     </div>
     <script src="game.js"></script> 
     <script src="sketch.js"></script>
-
-
   </body>
 </html>
