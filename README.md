@@ -2,6 +2,15 @@
 
 Using AI for playing the classical Missionaries and Cannibals Game.
 
+# ScreenShots
+
+  ### State Space 
+  <img src = 'screenshots/stateSpace.png' />
+  <br />
+  ### Dummy Game
+  <img src = 'screenshots/dummyGame.png' />
+  
+
 # Graphics Library 
 
 JavaScript Library - p5.js
